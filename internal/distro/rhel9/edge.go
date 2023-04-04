@@ -129,6 +129,24 @@ var (
 		basePartitionTables: edgeBasePartitionTables,
 	}
 
+	minimalrawImgType = imageType{
+		name:     "minimal-raw",
+		filename: "raw.img.zstd",
+		mimeType: "application/zstd",
+		packageSets: map[string]packageSetFunc{
+			osPkgsKey: minimalrpmPackageSet,
+		},
+		rpmOstree:           false,
+		kernelOptions:       "ro no_timer_check console=ttyS0,115200n8 biosdevname=0 net.ifnames=0",
+		bootable:            true,
+		defaultSize:         2 * common.GibiByte,
+		image:               minimalRawImage,
+		buildPipelines:      []string{"build"},
+		payloadPipelines:    []string{"os", "image", "zstd"},
+		exports:             []string{"zstd"},
+		basePartitionTables: defaultBasePartitionTables,
+	}
+
 	// Shared Services
 	edgeServices = []string{
 		// TODO(runcom): move fdo-client-linuxapp.service to presets?
@@ -486,4 +504,12 @@ func edgeSimplifiedInstallerPackageSet(t *imageType) rpmmd.PackageSet {
 	}
 
 	return ps
+}
+
+func minimalrpmPackageSet(t *imageType) rpmmd.PackageSet {
+	return rpmmd.PackageSet{
+		Include: []string{
+			"@core",
+		},
+	}
 }

@@ -416,6 +416,25 @@ func newDistro(name string, minor int) *distribution {
 		tarImgType,
 	)
 
+	x86_64.addImageTypes(
+		&platform.X86{
+			UEFIVendor: rd.vendor,
+			BasePlatform: platform.BasePlatform{
+				ImageFormat: platform.FORMAT_RAW,
+			},
+		},
+		minimalrawImgType,
+	)
+	aarch64.addImageTypes(
+		&platform.Aarch64{
+			UEFIVendor: rd.vendor,
+			BasePlatform: platform.BasePlatform{
+				ImageFormat: platform.FORMAT_RAW,
+			},
+		},
+		minimalrawImgType,
+	)
+
 	if rd.isRHEL() {
 		// add azure to RHEL distro only
 		x86_64.addImageTypes(azureX64Platform, azureRhuiImgType, azureByosImgType)

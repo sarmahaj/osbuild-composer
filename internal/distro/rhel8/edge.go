@@ -76,6 +76,27 @@ func edgeRawImgType() imageType {
 	return it
 }
 
+func minimalRawImgType() imageType {
+	it := imageType{
+		name:     "minimal-raw",
+		filename: "raw.img.zstd",
+		mimeType: "application/zstd",
+		packageSets: map[string]packageSetFunc{
+			osPkgsKey: minimalrpmPackageSet,
+		},
+		rpmOstree:           false,
+		kernelOptions:       "ro no_timer_check console=ttyS0,115200n8 biosdevname=0 net.ifnames=0",
+		bootable:            true,
+		defaultSize:         2 * common.GibiByte,
+		image:               minimalRawImage,
+		buildPipelines:      []string{"build"},
+		payloadPipelines:    []string{"os", "image", "zstd"},
+		exports:             []string{"zstd"},
+		basePartitionTables: defaultBasePartitionTables,
+	}
+	return it
+}
+
 func edgeInstallerImgType(rd distribution) imageType {
 	it := imageType{
 		name:        "edge-installer",
@@ -378,4 +399,12 @@ func edgeServices(rd distribution) []string {
 	}
 
 	return edgeServices
+}
+
+func minimalrpmPackageSet(t *imageType) rpmmd.PackageSet {
+	return rpmmd.PackageSet{
+		Include: []string{
+			"@core",
+		},
+	}
 }

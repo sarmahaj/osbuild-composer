@@ -1352,7 +1352,7 @@
       "arch": "",
       "image-type": "minimal-raw",
       "repositories": [],
-      "filename": "raw.img",
+      "filename": "raw.img.zstd",
       "blueprint": {}
     },
     "no-image-info": true,

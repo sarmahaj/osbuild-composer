@@ -423,6 +423,25 @@ func newDistro(name string, minor int) *distribution {
 		UEFIVendor: rd.vendor,
 	}
 
+	x86_64.addImageTypes(
+		&platform.X86{
+			UEFIVendor: rd.vendor,
+			BasePlatform: platform.BasePlatform{
+				ImageFormat: platform.FORMAT_RAW,
+			},
+		},
+		minimalRawImgType(),
+	)
+	aarch64.addImageTypes(
+		&platform.Aarch64{
+			UEFIVendor: rd.vendor,
+			BasePlatform: platform.BasePlatform{
+				ImageFormat: platform.FORMAT_RAW,
+			},
+		},
+		minimalRawImgType(),
+	)
+
 	if rd.isRHEL() {
 		if !common.VersionLessThan(rd.osVersion, "8.6") {
 			// image types only available on 8.6 and later on RHEL
